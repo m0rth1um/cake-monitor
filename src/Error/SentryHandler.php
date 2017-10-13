@@ -1,14 +1,16 @@
 <?php
+declare(strict_types = 1);
 namespace Monitor\Error;
 
 use Cake\Core\Configure;
-use Exception;
 use Throwable;
 
 class SentryHandler
 {
-    /* @var \Raven_Client $_ravenClient  */
-    protected $_ravenClient = nulL;
+    /**
+     * @var \Raven_Client $_ravenClient
+     */
+    protected $_ravenClient = null;
 
     /**
      * Constructor
@@ -39,9 +41,9 @@ class SentryHandler
      * Throwable Handler
      *
      * @param Throwable $throwable Throwable to handle
-     * @return void
+     * @return void|bool
      */
-    public function handle(Throwable $throwable)
+    public function handle(Throwable $throwable): ?bool
     {
         if (!Configure::read('CakeMonitor.Sentry.enabled') || error_reporting() === 0) {
             return false;
@@ -62,7 +64,7 @@ class SentryHandler
      * @param null $vars Variables
      * @return bool
      */
-    public function captureMessage($message, $params = [], $data = [], $stack = false, $vars = null)
+    public function captureMessage(string $message, array $params = [], array $data = [], bool $stack = false, $vars = null): bool
     {
         if (!Configure::read('CakeMonitor.Sentry.enabled') || error_reporting() === 0) {
             return false;

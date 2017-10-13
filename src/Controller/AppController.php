@@ -1,8 +1,10 @@
 <?php
+declare(strict_types = 1);
 
 namespace Monitor\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Network\Response;
 use Monitor\Lib\MonitorHandler;
 
 class AppController extends Controller
@@ -10,15 +12,15 @@ class AppController extends Controller
 
     /**
      * Instance of the Monitor Lib
-     * 
-     * @var Cakemonitor\Lib\MonitorHandler
+     *
+     * @var \Monitor\Lib\MonitorHandler
      */
     protected $_monitor;
 
     /**
      * {@inheritDoc}
      */
-    public function beforeFilter(\Cake\Event\Event $event)
+    public function beforeFilter(\Cake\Event\Event $event): void
     {
         $this->_monitor = new MonitorHandler($this->request, $this->response);
 
@@ -27,7 +29,12 @@ class AppController extends Controller
         $this->_monitor->handleChecks();
     }
 
-    public function render($view = false, $layout = false)
+    /**
+     * @param string|null $view   view
+     * @param string|null $layout layout
+     * @return \Cake\Http\Response
+     */
+    public function render($view = null, $layout = null): \Cake\Http\Response
     {
         return parent::render($view, $layout);
     }

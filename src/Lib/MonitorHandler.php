@@ -1,10 +1,10 @@
 <?php
+declare(strict_types = 1);
 namespace Monitor\Lib;
 
 use Cake\Core\Configure;
-use Cake\Network\Response;
 use Cake\Network\Request;
-use Cake\Utility\Hash;
+use Cake\Network\Response;
 
 /**
  * Used for processing monitor checks
@@ -22,23 +22,22 @@ class MonitorHandler
     /**
      * Reference of the current request object
      *
-     * @var Cake\Network\Http\Request
+     * @var \Cake\Network\Http\Request
      */
     public $request;
 
     /**
      * Reference of the current response object
      *
-     * @var Cake\Network\Http\Response
+     * @var \Cake\Network\Http\Response
      */
     public $response;
 
     /**
      * Constructor
      *
-     * @param Request $request Current Request
+     * @param Request  $request  Current Request
      * @param Response $response Current Response
-     * @return void
      */
     public function __construct(Request &$request, Response &$response)
     {
@@ -47,10 +46,7 @@ class MonitorHandler
 
         $this->request =& $request;
         $this->response =& $response;
-
     }
-
-
 
     /**
      * Validates Config
@@ -58,7 +54,7 @@ class MonitorHandler
      * @throws \Exception if configuration is incomplete
      * @return void
      */
-    protected function _validateConfig()
+    protected function _validateConfig(): void
     {
         foreach ($this->_config as $key => $value) {
             if (!isset($value)) {
@@ -72,20 +68,19 @@ class MonitorHandler
      *
      * @return void
      */
-    public function handleAuth()
+    public function handleAuth(): void
     {
-        if ($this->request->header('CAKEMONITORTOKEN') !==  $this->_config['accessToken']) {
+        if ($this->request->header('CAKEMONITORTOKEN') !== $this->_config['accessToken']) {
             die('NOT AUTHENTICATED');
         }
     }
-
 
     /**
      * Handle all defined checks
      *
      * @return void
      */
-    public function handleChecks()
+    public function handleChecks(): void
     {
         $errors = [];
         foreach ($this->_config['checks'] as $name => $check) {
@@ -94,11 +89,10 @@ class MonitorHandler
             }
             $result = $check['callback']();
             if ($result !== true) {
-               $errors[] = $name . ': <br>' . $check['error'] . ' - ' . $result;
+                $errors[] = $name . ': <br>' . $check['error'] . ' - ' . $result;
             }
         }
         if (!empty($errors)) {
-
             $this->response->statusCode(500);
 
             echo date('Y-m-d H:i:s') . ': ' . $this->_config['projectName'] . ' - ' . $this->_config['serverDescription'] . ' - Status Code: ' . $this->response->statusCode() . '<br><br> ';

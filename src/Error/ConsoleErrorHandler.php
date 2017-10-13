@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace Monitor\Error;
 
 use Cake\Console\ConsoleErrorHandler as CoreConsoleErrorHandler;
@@ -17,11 +18,12 @@ class ConsoleErrorHandler extends CoreConsoleErrorHandler
      * @param array|null $context Context
      * @return bool True if error was handled
      */
-    public function handleError($code, $description, $file = null, $line = null, $context = null)
+    public function handleError($code, $description, $file = null, $line = null, $context = null): bool
     {
         $exception = new ErrorException($description, 0, $code, $file, $line);
         $sentryHandler = new SentryHandler();
         $sentryHandler->handle($exception);
+
         return parent::handleError($code, $description, $file, $line, $context);
     }
 
@@ -33,10 +35,11 @@ class ConsoleErrorHandler extends CoreConsoleErrorHandler
      * @throws \Exception When renderer class not found
      * @see http://php.net/manual/en/function.set-exception-handler.php
      */
-    public function handleException(Exception $exception)
+    public function handleException(Exception $exception): void
     {
         $sentryHandler = new SentryHandler();
         $sentryHandler->handle($exception);
-        return parent::handleException($exception);
+
+        parent::handleException($exception);
     }
 }
