@@ -1,6 +1,7 @@
 # CakePHP 3 cake-monitor
 
 [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.txt)
+[![Build Status](https://travis-ci.org/m0rth1um/cake-monitor.svg?branch=master)](https://travis-ci.org/m0rth1um/cake-monitor)
 
 A simple config based monitoring plugin for CakePHP 3
 
